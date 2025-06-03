@@ -37,7 +37,7 @@ const Hero = () => {
               AI-crafted content that gets attention on X — in your authentic voice.
             </p>
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 mb-8">
-              <Link to="/signup">
+            <Link to="/signup">
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all">
                   Get Started Free
                   <ArrowRight className="ml-2 w-5 h-5" />
@@ -46,8 +46,8 @@ const Hero = () => {
               <Link to="#how-it-works">
                 <Button variant="outline" className="bg-white text-gray-700 border-gray-300 hover:bg-gray-100 px-8 py-6 text-lg rounded-xl">
                   See How It Works
-                </Button>
-              </Link>
+              </Button>
+            </Link>
             </div>
             <div className="mt-8">
               <p className="text-gray-600 mb-4 flex items-center justify-center lg:justify-start gap-2">

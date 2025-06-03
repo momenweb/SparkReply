@@ -88,7 +88,7 @@ An AI-powered social media reply generator that helps you create viral, engaging
 
 6. **Start the development server**
    ```bash
-   npm run dev
+npm run dev
    # or
    bun dev
    ```

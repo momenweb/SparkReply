@@ -53,8 +53,8 @@ const HowItWorks = () => {
                   <div className="bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 h-full transform group-hover:-translate-y-1">
                     {/* Step number badge */}
                     <div className="absolute -top-3 -right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center text-sm font-bold text-gray-900 shadow-md z-20 border border-gray-200">
-                      {step.number}
-                    </div>
+                        {step.number}
+                      </div>
                     
                     {/* Icon */}
                     <div className={`w-16 h-16 bg-gradient-to-r ${step.color} rounded-full flex items-center justify-center mb-6 mx-auto relative z-10 -mt-8`}>
@@ -66,14 +66,14 @@ const HowItWorks = () => {
                       <h3 className="text-lg font-semibold mb-3 text-gray-900">{step.title}</h3>
                       <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
                     </div>
-                  </div>
+                    </div>
 
-                  {/* Arrow connector */}
-                  {index < steps.length - 1 && (
+                    {/* Arrow connector */}
+                    {index < steps.length - 1 && (
                     <div className="hidden lg:block absolute top-1/2 -right-4 z-30">
                       <ArrowRight className="text-blue-500 w-8 h-8" />
-                    </div>
-                  )}
+                      </div>
+                    )}
                 </div>
               );
             })}
