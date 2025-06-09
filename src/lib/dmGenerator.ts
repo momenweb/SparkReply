@@ -3,6 +3,7 @@ import { supabase } from './supabase';
 export interface DMGenerationRequest {
   handle: string;
   goal: string;
+  writingStyleHandles?: string[];
 }
 
 export interface DMGenerationResponse {

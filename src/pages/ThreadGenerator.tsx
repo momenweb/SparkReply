@@ -199,9 +199,9 @@ const ThreadGenerator = () => {
         </Alert>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Input section */}
-        <div className="lg:col-span-1 space-y-6">
+        <div className="lg:col-span-2 space-y-6">
           <Card className="bg-white border-gray-200">
             <CardHeader>
               <CardTitle className="text-gray-900 flex items-center">
@@ -379,7 +379,7 @@ const ThreadGenerator = () => {
         </div>
 
         {/* Output section */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-3">
           {result ? (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -457,14 +457,31 @@ const ThreadGenerator = () => {
                     <div className="bg-orange-100 rounded-full p-2">
                       <Sparkles className="w-4 h-4 text-orange-600" />
                     </div>
-                    <div>
-                      <h3 className="font-medium text-orange-900 mb-1">Thread Tips</h3>
-                      <ul className="text-sm text-orange-800 space-y-1">
-                        <li>• Post the first tweet and reply with the rest in sequence</li>
-                        <li>• Use "🧵" or "Thread:" in your first tweet to signal a thread</li>
-                        <li>• Engage with replies to boost visibility</li>
-                        <li>• Pin the thread to your profile if it performs well</li>
-                      </ul>
+                    <div className="flex-1">
+                      <h3 className="font-medium text-orange-900 mb-2">How to Post Your Viral Thread</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-orange-800">
+                        <div>
+                          <h4 className="font-semibold mb-1">Posting Strategy:</h4>
+                          <ul className="space-y-1">
+                            <li>• Post the first tweet and reply with the rest in sequence</li>
+                            <li>• Use "🧵" or "Thread:" in your first tweet</li>
+                            <li>• Post during peak hours (9AM-12PM or 7-9PM)</li>
+                            <li>• Reply to your own thread immediately after posting</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold mb-1">Boost Engagement:</h4>
+                          <ul className="space-y-1">
+                            <li>• Engage with replies within the first hour</li>
+                            <li>• Pin the thread if it performs well</li>
+                            <li>• Retweet with a comment after 24 hours</li>
+                            <li>• Share in relevant communities/groups</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="mt-3 p-2 bg-orange-100 rounded text-xs text-orange-700">
+                        <strong>Pro tip:</strong> The first 30 minutes are crucial. Engage actively to signal to the algorithm that your thread is worth promoting.
+                      </div>
                     </div>
                   </div>
                 </CardContent>

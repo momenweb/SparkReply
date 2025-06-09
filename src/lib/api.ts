@@ -315,17 +315,55 @@ export async function deleteContent(contentId: string) {
 // User settings functions
 export async function getUserSettings(userId: string): Promise<UserSettings | null> {
   try {
-    const { data, error } = await supabase
+    // First try to get existing settings
+    const { data: existingData, error: selectError } = await supabase
       .from('user_settings')
       .select('*')
       .eq('user_id', userId)
-      .single()
+      .maybeSingle() // Use maybeSingle instead of single to avoid errors when no data
 
-    if (error && error.code !== 'PGRST116') throw error
-    return data
+    if (existingData) {
+      return existingData
+    }
+
+    // If no settings exist, create default ones
+    if (!existingData) {
+      const defaultSettings = {
+        user_id: userId,
+        default_tone: 'professional',
+        writing_style_handles: [],
+        auto_save: true,
+        tweet_length_limit: 280
+      }
+
+      const { data: newData, error: insertError } = await supabase
+        .from('user_settings')
+        .upsert([defaultSettings], { onConflict: 'user_id' }) // Use upsert with conflict resolution
+        .select()
+        .single()
+
+      if (insertError) {
+        console.error('Error creating default settings:', insertError)
+        // If insert fails, try to get existing data again (race condition)
+        const { data: retryData } = await supabase
+          .from('user_settings')
+          .select('*')
+          .eq('user_id', userId)
+          .maybeSingle()
+        
+        if (retryData) {
+          return retryData
+        }
+        throw insertError
+      }
+
+      return newData
+    }
+
+    return null
   } catch (error) {
     console.error('Error fetching user settings:', error)
-    // Return default settings
+    // Return default settings as fallback
     return {
       id: Date.now().toString(),
       user_id: userId,

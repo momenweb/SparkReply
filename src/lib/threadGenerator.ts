@@ -5,6 +5,7 @@ export interface ThreadGenerationRequest {
   tone?: string;
   targetAudience?: string;
   handleToMimic?: string;
+  writingStyleHandles?: string[];
 }
 
 export interface ThreadGenerationResponse {

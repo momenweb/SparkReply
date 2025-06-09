@@ -15,7 +15,8 @@ import {
   ChevronDown,
   Bell,
   Zap,
-  LogOut
+  LogOut,
+  Sparkles
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
@@ -56,6 +57,7 @@ const DashboardLayout = () => {
     { name: 'DM Generator', href: '/dashboard/dm-generator', icon: MessageSquare },
     { name: 'Reply Generator', href: '/dashboard/reply-generator', icon: Reply },
     { name: 'Thread Generator', href: '/dashboard/thread-generator', icon: FileText },
+    { name: 'Post Generator', href: '/dashboard/post-generator', icon: Sparkles },
     { name: 'Thread Rewriter', href: '/dashboard/thread-rewriter', icon: Edit },
     { name: 'Saved Content', href: '/dashboard/saved-content', icon: Save },
     { name: 'Settings', href: '/dashboard/settings', icon: Settings },

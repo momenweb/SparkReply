@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Search, 
   Copy, 
@@ -12,7 +14,11 @@ import {
   Reply, 
   FileText,
   Calendar,
-  Filter
+  Filter,
+  Clock,
+  ArrowUpDown,
+  LayoutGrid,
+  List
 } from 'lucide-react';
 import { getSavedContent, deleteContent } from '@/lib/api';
 import { SavedContent as SavedContentType } from '@/lib/supabase';
@@ -25,12 +31,15 @@ const SavedContent = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'dm' | 'reply' | 'thread'>('all');
   const [isLoading, setIsLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState<'date' | 'type' | 'title'>('date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const { user } = useAuth();
   const { toast } = useToast();
 
   const tabs = [
-    { id: 'all', name: 'All', icon: Filter },
-    { id: 'dm', name: 'DMs', icon: MessageSquare },
+    { id: 'all', name: 'All Content', icon: Filter },
+    { id: 'dm', name: 'Direct Messages', icon: MessageSquare },
     { id: 'reply', name: 'Replies', icon: Reply },
     { id: 'thread', name: 'Threads', icon: FileText },
   ];
@@ -42,8 +51,8 @@ const SavedContent = () => {
   }, [user]);
 
   useEffect(() => {
-    filterContent();
-  }, [content, searchQuery, activeTab]);
+    filterAndSortContent();
+  }, [content, searchQuery, activeTab, sortBy, sortOrder]);
 
   const loadContent = async () => {
     if (!user) return;
@@ -64,7 +73,7 @@ const SavedContent = () => {
     }
   };
 
-  const filterContent = () => {
+  const filterAndSortContent = () => {
     let filtered = content;
 
     // Filter by type
@@ -79,6 +88,26 @@ const SavedContent = () => {
         item.content.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
+
+    // Sort content
+    filtered = filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'date':
+          return sortOrder === 'desc' 
+            ? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            : new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case 'type':
+          return sortOrder === 'desc'
+            ? b.type.localeCompare(a.type)
+            : a.type.localeCompare(b.type);
+        case 'title':
+          return sortOrder === 'desc'
+            ? b.title.localeCompare(a.title)
+            : a.title.localeCompare(b.title);
+        default:
+          return 0;
+      }
+    });
 
     setFilteredContent(filtered);
   };
@@ -138,33 +167,103 @@ const SavedContent = () => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
-      year: 'numeric'
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
+  };
+
+  const getContentStats = () => {
+    const total = content.length;
+    const dms = content.filter(item => item.type === 'dm').length;
+    const replies = content.filter(item => item.type === 'reply').length;
+    const threads = content.filter(item => item.type === 'thread').length;
+    return { total, dms, replies, threads };
   };
 
   if (isLoading) {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Saved Content</h1>
-          <p className="text-gray-400">Loading your saved content...</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Content Library</h1>
+          <p className="text-gray-500">Loading your saved content...</p>
         </div>
-        <div className="flex items-center justify-center py-12">
-          <div className="text-white">Loading...</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <Card key={i} className="bg-white">
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4" />
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2" />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     );
   }
 
+  const stats = getContentStats();
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">Saved Content</h1>
-        <p className="text-gray-400">Manage your saved DMs, replies, and threads</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Content Library</h1>
+        <p className="text-gray-500">Manage and organize your saved content</p>
+      </div>
+
+      {/* Stats Overview */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card className="bg-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">Total Items</p>
+                <h3 className="text-2xl font-bold text-gray-900">{stats.total}</h3>
+              </div>
+              <Filter className="w-8 h-8 text-gray-400" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">Direct Messages</p>
+                <h3 className="text-2xl font-bold text-blue-600">{stats.dms}</h3>
+              </div>
+              <MessageSquare className="w-8 h-8 text-blue-200" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">Replies</p>
+                <h3 className="text-2xl font-bold text-green-600">{stats.replies}</h3>
+              </div>
+              <Reply className="w-8 h-8 text-green-200" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">Threads</p>
+                <h3 className="text-2xl font-bold text-purple-600">{stats.threads}</h3>
+              </div>
+              <FileText className="w-8 h-8 text-purple-200" />
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Search and Filters */}
-      <Card className="bg-gray-800 border-gray-700">
+      <Card className="bg-white">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
@@ -174,39 +273,86 @@ const SavedContent = () => {
                 placeholder="Search your content..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                className="pl-10 bg-white border-gray-200 text-gray-900 placeholder-gray-400"
               />
             </div>
 
-            {/* Tabs */}
-            <div className="flex space-x-2">
+            {/* Sort Controls */}
+            <div className="flex items-center space-x-2">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as 'date' | 'type' | 'title')}
+                className="bg-white border border-gray-200 rounded-md text-sm px-3 py-2"
+              >
+                <option value="date">Sort by Date</option>
+                <option value="type">Sort by Type</option>
+                <option value="title">Sort by Title</option>
+              </select>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                className="border-gray-200"
+              >
+                <ArrowUpDown className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
+                className="border-gray-200"
+              >
+                {viewMode === 'grid' ? (
+                  <LayoutGrid className="h-4 w-4" />
+                ) : (
+                  <List className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="mt-6">
+            <TabsList className="bg-gray-100">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
-                  <Button
-                    key={tab.id}
-                    variant={activeTab === tab.id ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setActiveTab(tab.id as any)}
-                    className={activeTab === tab.id ? "bg-blue-600 text-white" : "border-gray-600 text-gray-300 hover:text-white"}
+                  <TabsTrigger 
+                    key={tab.id} 
+                    value={tab.id}
+                    className="data-[state=active]:bg-white"
                   >
                     <Icon className="w-4 h-4 mr-2" />
                     {tab.name}
-                  </Button>
+                    <Badge variant="secondary" className="ml-2 bg-gray-100">
+                      {tab.id === 'all' ? stats.total : 
+                       tab.id === 'dm' ? stats.dms :
+                       tab.id === 'reply' ? stats.replies : stats.threads}
+                    </Badge>
+                  </TabsTrigger>
                 );
               })}
-            </div>
-          </div>
+            </TabsList>
+          </Tabs>
         </CardContent>
       </Card>
 
-      {/* Content Grid */}
+      {/* Content Display */}
       {filteredContent.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className={viewMode === 'grid' ? 
+          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : 
+          "space-y-4"
+        }>
           {filteredContent.map((item) => {
             const TypeIcon = getTypeIcon(item.type);
             return (
-              <Card key={item.id} className="bg-gray-800 border-gray-700 hover:border-gray-600 transition-colors">
+              <Card key={item.id} className={`bg-white hover:border-gray-300 transition-colors ${
+                viewMode === 'list' ? 'border-l-4' : ''
+              } ${
+                item.type === 'dm' ? 'border-l-blue-500' :
+                item.type === 'reply' ? 'border-l-green-500' :
+                'border-l-purple-500'
+              }`}>
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-2">
@@ -214,15 +360,15 @@ const SavedContent = () => {
                         <TypeIcon className="w-4 h-4 text-white" />
                       </div>
                       <div>
-                        <CardTitle className="text-white text-sm font-medium truncate">
+                        <CardTitle className="text-gray-900 text-sm font-medium line-clamp-1">
                           {item.title}
                         </CardTitle>
                         <div className="flex items-center space-x-2 mt-1">
-                          <Badge variant="outline" className="text-xs capitalize">
+                          <Badge variant="secondary" className="text-xs capitalize">
                             {item.type}
                           </Badge>
-                          <span className="text-xs text-gray-400 flex items-center">
-                            <Calendar className="w-3 h-3 mr-1" />
+                          <span className="text-xs text-gray-500 flex items-center">
+                            <Clock className="w-3 h-3 mr-1" />
                             {formatDate(item.created_at)}
                           </span>
                         </div>
@@ -231,32 +377,34 @@ const SavedContent = () => {
                   </div>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <div className="bg-gray-700 rounded-lg p-3 mb-4">
-                    <p className="text-sm text-gray-300 line-clamp-3">
-                      {item.content.length > 150 
-                        ? `${item.content.substring(0, 150)}...` 
-                        : item.content
-                      }
+                  <ScrollArea className="h-24 rounded-md border p-2 mb-4">
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                      {item.content}
                     </p>
-                  </div>
+                  </ScrollArea>
                   <div className="flex space-x-2">
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={() => handleCopy(item.content)}
-                      className="flex-1"
+                      className="flex-1 border-gray-200 text-gray-700 hover:text-gray-900 hover:border-gray-300"
                     >
                       <Copy className="w-3 h-3 mr-1" />
                       Copy
                     </Button>
-                    <Button variant="outline" size="sm">
-                      <Edit className="w-3 h-3" />
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1 border-gray-200 text-gray-700 hover:text-gray-900 hover:border-gray-300"
+                    >
+                      <Edit className="w-3 h-3 mr-1" />
+                      Edit
                     </Button>
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={() => handleDelete(item.id)}
-                      className="text-red-400 hover:text-red-300"
+                      className="border-gray-200 text-red-600 hover:text-red-700 hover:border-red-200"
                     >
                       <Trash2 className="w-3 h-3" />
                     </Button>
@@ -267,32 +415,20 @@ const SavedContent = () => {
           })}
         </div>
       ) : (
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="py-12">
-            <div className="text-center">
-              <FileText className="w-12 h-12 mx-auto mb-4 text-gray-400 opacity-50" />
-              <h3 className="text-lg font-medium text-white mb-2">
-                {searchQuery || activeTab !== 'all' 
-                  ? 'No content found' 
-                  : 'No saved content yet'
-                }
-              </h3>
-              <p className="text-gray-400 mb-6">
-                {searchQuery || activeTab !== 'all'
-                  ? 'Try adjusting your search or filters'
-                  : 'Start creating content to see it here'
-                }
-              </p>
-              {!searchQuery && activeTab === 'all' && (
-                <div className="flex justify-center space-x-4">
-                  <Button asChild>
-                    <a href="/dashboard/dm-generator">Generate DM</a>
-                  </Button>
-                  <Button variant="outline" asChild>
-                    <a href="/dashboard/thread-generator">Create Thread</a>
-                  </Button>
-                </div>
-              )}
+        <Card className="bg-white">
+          <CardContent className="p-6 text-center">
+            <div className="flex flex-col items-center justify-center py-12 space-y-4">
+              <div className="bg-gray-100 rounded-full p-4">
+                <Search className="w-8 h-8 text-gray-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">No content found</h3>
+                <p className="text-gray-500 mt-1">
+                  {searchQuery
+                    ? "Try adjusting your search or filters"
+                    : "Start saving content to build your library"}
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>

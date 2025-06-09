@@ -9,7 +9,8 @@ import {
   TrendingUp, 
   Zap,
   Clock,
-  ArrowRight
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import LoadingSpinner from '@/components/LoadingSpinner';
@@ -33,6 +34,7 @@ const Dashboard = () => {
     { name: 'Generate DM', href: '/dashboard/dm-generator', icon: MessageSquare, color: 'bg-blue-100' },
     { name: 'Smart Reply', href: '/dashboard/reply-generator', icon: Reply, color: 'bg-green-100' },
     { name: 'Create Thread', href: '/dashboard/thread-generator', icon: FileText, color: 'bg-purple-100' },
+    { name: 'Viral Posts', href: '/dashboard/post-generator', icon: Sparkles, color: 'bg-yellow-100' },
     { name: 'Rewrite Thread', href: '/dashboard/thread-rewriter', icon: Edit, color: 'bg-orange-100' },
   ];
 

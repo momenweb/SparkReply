@@ -189,9 +189,9 @@ const ReplyGenerator = () => {
         </Alert>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Input section */}
-        <div className="lg:col-span-1 space-y-6">
+        <div className="lg:col-span-2 space-y-6">
           <Card className="bg-white border-gray-200">
             <CardHeader>
               <CardTitle className="text-gray-900 flex items-center">
@@ -325,7 +325,7 @@ const ReplyGenerator = () => {
         </div>
 
         {/* Output section */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-3">
           {result ? (
             <div className="space-y-4">
               <div className="flex items-center justify-between">

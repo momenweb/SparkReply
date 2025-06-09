@@ -8,6 +8,7 @@ import {
   validateTwitterHandle,
   formatTwitterHandle
 } from '@/lib/dmGenerator';
+import { useUserSettings } from './useUserSettings';
 
 interface UseDMGeneratorState {
   isGenerating: boolean;
@@ -25,6 +26,7 @@ export function useDMGenerator() {
     result: null,
     history: [],
   });
+  const { writingStyleHandles } = useUserSettings();
 
   const clearError = useCallback(() => {
     setState(prev => ({ ...prev, error: null }));
@@ -67,6 +69,7 @@ export function useDMGenerator() {
       const request: DMGenerationRequest = {
         handle: cleanHandle,
         goal: goal.trim(),
+        writingStyleHandles: writingStyleHandles
       };
 
       const response = await generateDMs(request);
@@ -91,7 +94,7 @@ export function useDMGenerator() {
       }));
       throw error;
     }
-  }, []);
+  }, [writingStyleHandles]);
 
   const loadHistory = useCallback(async (limit: number = 10) => {
     setState(prev => ({ ...prev, isLoadingHistory: true, error: null }));

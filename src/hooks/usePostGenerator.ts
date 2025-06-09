@@ -1,39 +1,37 @@
 import { useState, useCallback } from 'react';
 import { 
-  generateThread, 
-  getThreadHistory, 
-  deleteThreadGeneration,
-  getTrendingTopics,
-  getViralPosts,
-  ThreadGenerationRequest, 
-  ThreadGenerationResponse,
-  TrendingTopic,
+  generatePosts, 
+  generatePostIdeas,
+  getPostHistory, 
+  deletePostGeneration,
+  PostGenerationRequest, 
+  PostGenerationResponse,
+  PostIdeasRequest,
+  PostIdeasResponse,
   validateTwitterHandle,
   formatTwitterHandle
-} from '@/lib/threadGenerator';
+} from '@/lib/postGenerator';
 import { useUserSettings } from './useUserSettings';
 
-interface UseThreadGeneratorState {
+interface UsePostGeneratorState {
   isGenerating: boolean;
+  isGeneratingIdeas: boolean;
   isLoadingHistory: boolean;
-  isLoadingTrends: boolean;
   error: string | null;
-  result: ThreadGenerationResponse | null;
+  result: PostGenerationResponse | null;
+  ideas: PostIdeasResponse | null;
   history: any[];
-  trendingTopics: TrendingTopic[];
-  viralPosts: string[];
 }
 
-export function useThreadGenerator() {
-  const [state, setState] = useState<UseThreadGeneratorState>({
+export function usePostGenerator() {
+  const [state, setState] = useState<UsePostGeneratorState>({
     isGenerating: false,
+    isGeneratingIdeas: false,
     isLoadingHistory: false,
-    isLoadingTrends: false,
     error: null,
     result: null,
+    ideas: null,
     history: [],
-    trendingTopics: [],
-    viralPosts: [],
   });
   const { writingStyleHandles, defaultTone } = useUserSettings();
 
@@ -45,11 +43,15 @@ export function useThreadGenerator() {
     setState(prev => ({ ...prev, result: null }));
   }, []);
 
-  const generateThreadContent = useCallback(async (
+  const clearIdeas = useCallback(() => {
+    setState(prev => ({ ...prev, ideas: null }));
+  }, []);
+
+  const generatePostsForTopic = useCallback(async (
     topic: string,
     tone?: string,
-    targetAudience?: string,
-    handleToMimic?: string
+    writingStyleHandle?: string,
+    goal?: string
   ) => {
     // Validate inputs
     if (!topic?.trim()) {
@@ -57,7 +59,7 @@ export function useThreadGenerator() {
       return;
     }
 
-    if (handleToMimic && !validateTwitterHandle(handleToMimic)) {
+    if (writingStyleHandle && !validateTwitterHandle(writingStyleHandle)) {
       setState(prev => ({ 
         ...prev, 
         error: 'Invalid Twitter handle format. Use format: @username or username' 
@@ -73,17 +75,17 @@ export function useThreadGenerator() {
     }));
 
     try {
-      const request: ThreadGenerationRequest = {
+      const request: PostGenerationRequest = {
         topic: topic.trim(),
         tone: tone?.trim() || defaultTone,
-        targetAudience: targetAudience?.trim() || undefined,
-        handleToMimic: handleToMimic?.trim() ? formatTwitterHandle(handleToMimic.trim()) : undefined,
-        writingStyleHandles
+        writingStyleHandle: writingStyleHandle?.trim() ? formatTwitterHandle(writingStyleHandle.trim()) : undefined,
+        goal: goal?.trim() || undefined,
+        writingStyleHandles // Include writing style handles from settings
       };
 
-      console.log('Generating thread with request:', request);
+      console.log('Generating posts with request:', request);
 
-      const response = await generateThread(request);
+      const response = await generatePosts(request);
       
       setState(prev => ({ 
         ...prev, 
@@ -97,7 +99,7 @@ export function useThreadGenerator() {
       
       return response;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to generate thread';
+      const errorMessage = error instanceof Error ? error.message : 'Failed to generate posts';
       setState(prev => ({ 
         ...prev, 
         isGenerating: false, 
@@ -107,11 +109,61 @@ export function useThreadGenerator() {
     }
   }, [writingStyleHandles, defaultTone]);
 
+  const generateIdeasForCreator = useCallback(async (writingStyleHandle: string) => {
+    // Validate inputs
+    if (!writingStyleHandle?.trim()) {
+      setState(prev => ({ ...prev, error: 'Writing style handle is required for idea generation' }));
+      return;
+    }
+
+    if (!validateTwitterHandle(writingStyleHandle)) {
+      setState(prev => ({ 
+        ...prev, 
+        error: 'Invalid Twitter handle format. Use format: @username or username' 
+      }));
+      return;
+    }
+
+    setState(prev => ({ 
+      ...prev, 
+      isGeneratingIdeas: true, 
+      error: null, 
+      ideas: null 
+    }));
+
+    try {
+      const request: PostIdeasRequest = {
+        writingStyleHandle: formatTwitterHandle(writingStyleHandle.trim())
+      };
+
+      console.log('Generating post ideas with request:', request);
+
+      const response = await generatePostIdeas(request);
+      
+      setState(prev => ({ 
+        ...prev, 
+        isGeneratingIdeas: false, 
+        ideas: response,
+        error: null 
+      }));
+      
+      return response;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to generate post ideas';
+      setState(prev => ({ 
+        ...prev, 
+        isGeneratingIdeas: false, 
+        error: errorMessage 
+      }));
+      throw error;
+    }
+  }, []);
+
   const loadHistory = useCallback(async (limit: number = 10) => {
     setState(prev => ({ ...prev, isLoadingHistory: true, error: null }));
 
     try {
-      const historyData = await getThreadHistory(limit);
+      const historyData = await getPostHistory(limit);
       setState(prev => ({ 
         ...prev, 
         isLoadingHistory: false, 
@@ -132,7 +184,7 @@ export function useThreadGenerator() {
 
   const deleteHistoryItem = useCallback(async (id: string) => {
     try {
-      await deleteThreadGeneration(id);
+      await deletePostGeneration(id);
       
       // Remove the item from local state
       setState(prev => ({
@@ -148,68 +200,25 @@ export function useThreadGenerator() {
     }
   }, []);
 
-  const loadTrendingTopics = useCallback(async () => {
-    setState(prev => ({ ...prev, isLoadingTrends: true, error: null }));
-
-    try {
-      const [trends, viral] = await Promise.all([
-        getTrendingTopics(),
-        getViralPosts()
-      ]);
-      
-      setState(prev => ({ 
-        ...prev, 
-        isLoadingTrends: false, 
-        trendingTopics: trends,
-        viralPosts: viral,
-        error: null 
-      }));
-      
-      return { trends, viral };
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to load trending topics';
-      setState(prev => ({ 
-        ...prev, 
-        isLoadingTrends: false, 
-        error: errorMessage 
-      }));
-      throw error;
-    }
-  }, []);
-
-  const getRandomTopic = useCallback(() => {
-    const allTopics = [
-      ...state.trendingTopics.map(t => t.name),
-      ...state.viralPosts
-    ];
-    
-    if (allTopics.length === 0) {
-      return "The future of AI and how it will change everything";
-    }
-    
-    return allTopics[Math.floor(Math.random() * allTopics.length)];
-  }, [state.trendingTopics, state.viralPosts]);
-
   return {
     // State
     isGenerating: state.isGenerating,
+    isGeneratingIdeas: state.isGeneratingIdeas,
     isLoadingHistory: state.isLoadingHistory,
-    isLoadingTrends: state.isLoadingTrends,
     error: state.error,
     result: state.result,
+    ideas: state.ideas,
     history: state.history,
-    trendingTopics: state.trendingTopics,
-    viralPosts: state.viralPosts,
     
     // Actions
-    generateThread: generateThreadContent,
+    generatePosts: generatePostsForTopic,
+    generateIdeas: generateIdeasForCreator,
     loadHistory,
     deleteHistoryItem,
-    loadTrendingTopics,
-    getRandomTopic,
-    retryGeneration: generateThreadContent,
+    retryGeneration: generatePostsForTopic,
     clearError,
     clearResult,
+    clearIdeas,
     
     // Utilities
     validateTwitterHandle,

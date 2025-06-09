@@ -38,6 +38,7 @@ export interface UserSettings {
   writing_style_handles: string[]
   auto_save: boolean
   tweet_length_limit: number
+  x_handle?: string
   created_at: string
   updated_at: string
 } 

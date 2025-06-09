@@ -169,7 +169,49 @@ serve(async (req) => {
     }
 
     // Prepare the prompt for OpenRouter
-    let prompt = `You are an expert X (Twitter) thread creator who specializes in viral, engaging content. Your goal is to create a compelling thread that captures attention, provides value, and encourages engagement.
+    let prompt = `You are an expert X (Twitter) thread writer. Create a viral thread that follows this EXACT format and structure. DO NOT use placeholders - write actual content.
+
+EXAMPLE THREAD TO FOLLOW:
+"🧵 Don't build another boring SaaS.
+Here's how smart founders turn tiny ideas into $10k/mo startups — without a team, funding, or ads:
+
+Steal the formula:
+↓
+
+Find a "daily pain" — not just a "nice-to-have"
+→ Scroll X, Reddit, Slack groups
+→ Look for complaints, workarounds, manual workflows
+→ Example: "I waste 3 hours replying to DMs" → Repli.ai was born
+
+Build the outcome, not the product
+→ People buy results, not features
+→ Instead of: "We use AI to summarize meetings"
+Say: "Turn your 1-hour meeting into a 3-minute client-ready summary"
+
+Add distribution into the product
+→ Notion: share a doc, get 5 new users
+→ Calendly: send a link, invite a lead
+→ SparkReply: share a thread, get DMs
+
+Your users should spread it without thinking.
+
+Don't launch like a dev — launch like a marketer
+✅ Product Hunt (Tuesdays)
+✅ IndieHackers, Betalist, Lapa Ninja
+✅ Twitter threads, micro-creator reviews
+→ Each one = backlinks + traffic + proof
+
+Want to skip the guesswork?
+→ I run an MVP agency that helps founders launch fast with AI baked in
+→ From idea → working SaaS in 2–4 weeks
+→ Learn more → sprkshiftagency.com
+→ Or DM me "MVP" and I'll show you how
+
+You don't need a unicorn idea.
+You need the right system.
+
+Follow @username for no-fluff SaaS growth playbooks.
+RT to help someone launch smart."
 
 THREAD TOPIC: "${topic}"
 ${tone ? `TONE/STYLE: ${tone}` : ''}
@@ -187,30 +229,63 @@ ${userTweets.slice(0, 5).map((tweet, i) => `${i + 1}. "${tweet.text}"`).join('\n
 Please mimic this user's writing style, tone, and approach while creating the thread.
 ` : ''}
 
-THREAD REQUIREMENTS:
-- Create a thread with 6-12 tweets total
-- Start with a compelling hook tweet that makes people want to read more
-- Include 5-10 body tweets that provide value, insights, or entertainment
-- End with a strong call-to-action or conclusion
-- Each tweet must be under 280 characters
-- Use engaging formatting (line breaks, emojis sparingly, bullet points when appropriate)
-- Make it shareable and likely to go viral
-- Ensure each tweet flows naturally to the next
-- Include actionable insights or valuable information
+MANDATORY STRUCTURE (write actual content, not placeholders):
 
-OUTPUT FORMAT: Return ONLY a valid JSON object with no additional text:
+1. HOOK TWEET: Start with "🧵" + contrarian statement about the topic + specific promise
+   Example: "🧵 Don't [common belief about topic]. Here's [specific outcome/method]: [teaser]"
+
+2. SETUP TWEET: Action phrase + downward arrow
+   Example: "The blueprint:" or "Here's the system:" or "The method:" followed by "↓"
+
+3. VALUE TWEETS (4-6 tweets): Each with bold headline + bullet points with → arrows
+   Format:
+   [Bold headline without quotes]
+   → [Specific tactic]
+   → [Real example or number]
+   → [Concrete outcome]
+
+4. TRANSITION TWEET: One memorable insight or one-liner
+
+5. CTA TWEET: Specific call to action
+   Format: "Want to [specific outcome]? → [action] → [link/DM instruction]"
+
+6. CLOSING TWEET: Philosophical insight + follow request + RT request
+   Format: "[Insight]. Follow @[handle] for [value]. RT to [help others]."
+
+FORMATTING REQUIREMENTS:
+- Use → for ALL bullet points (never use • or -)
+- Use ✅ for proven examples/tactics
+- Include specific numbers and outcomes
+- Keep each tweet under 280 characters
+- Use line breaks for readability
+- NO placeholder text like "[Setup tweet]" or "[Value tweet]"
+- Write actual, specific content
+
+CONTENT REQUIREMENTS:
+- Contrarian hook that challenges common thinking about the topic
+- Specific, actionable tactics people can implement
+- Real examples with numbers/outcomes
+- Clear value in every tweet
+- Strong, specific call-to-action
+- Professional but conversational tone
+
+OUTPUT FORMAT: Return ONLY valid JSON with actual content:
 
 {
   "thread": [
-    "Hook tweet that grabs attention...",
-    "First body tweet with valuable insight...",
-    "Second body tweet building on the topic...",
-    "Continue with more valuable content...",
-    "Final tweet with strong CTA or conclusion..."
+    "🧵 [Actual contrarian statement about ${topic}]. Here's [specific promise]: [teaser]",
+    "[Actual action phrase]: ↓",
+    "[Actual headline]\n→ [Actual tactic]\n→ [Actual example]\n→ [Actual outcome]",
+    "[Another headline]\n→ [Another tactic]\n→ [Another example]\n→ [Another outcome]",
+    "[Another headline]\n→ [Another tactic]\n→ [Another example]",
+    "[Another headline]\n→ [Another tactic]\n→ [Another example]",
+    "[Memorable insight or transition]",
+    "Want to [specific outcome]?\n→ [specific action]\n→ [link or DM instruction]",
+    "[Philosophical insight]. Follow @username for [specific value]. RT to [help others]."
   ]
 }
 
-Create the thread now:`
+Create a viral thread about "${topic}" now with actual content (no placeholders):`
 
     // Call OpenRouter API with Llama 4 Scout
     const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {

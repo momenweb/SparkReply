@@ -9,6 +9,7 @@ import {
   formatTweetUrl,
   extractTweetId
 } from '@/lib/replyGenerator';
+import { useUserSettings } from './useUserSettings';
 
 interface UseReplyGeneratorState {
   isGenerating: boolean;
@@ -26,6 +27,7 @@ export function useReplyGenerator() {
     result: null,
     history: [],
   });
+  const { writingStyleHandles, defaultTone } = useUserSettings();
 
   const clearError = useCallback(() => {
     setState(prev => ({ ...prev, error: null }));
@@ -67,7 +69,10 @@ export function useReplyGenerator() {
 
     try {
       // Construct request object with only defined values
-      const request: ReplyGenerationRequest = {};
+      const request: ReplyGenerationRequest = {
+        writingStyleHandles,
+        tone: defaultTone
+      };
       
       if (tweetUrl?.trim()) {
         request.tweetUrl = formatTweetUrl(tweetUrl.trim());
@@ -117,7 +122,7 @@ export function useReplyGenerator() {
       }));
       throw error;
     }
-  }, []);
+  }, [writingStyleHandles, defaultTone]);
 
   const loadHistory = useCallback(async (limit: number = 10) => {
     setState(prev => ({ ...prev, isLoadingHistory: true, error: null }));

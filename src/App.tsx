@@ -15,6 +15,7 @@ import Dashboard from "./pages/Dashboard";
 import DMGenerator from "./pages/DMGenerator";
 import ReplyGenerator from "./pages/ReplyGenerator";
 import ThreadGenerator from "./pages/ThreadGenerator";
+import PostGenerator from "./pages/PostGenerator";
 import ThreadRewriter from "./pages/ThreadRewriter";
 import SavedContent from "./pages/SavedContent";
 import Settings from "./pages/Settings";
@@ -70,6 +71,7 @@ const App = () => (
                 <Route path="dm-generator" element={<DMGenerator />} />
                 <Route path="reply-generator" element={<ReplyGenerator />} />
                 <Route path="thread-generator" element={<ThreadGenerator />} />
+                <Route path="post-generator" element={<PostGenerator />} />
                 <Route path="thread-rewriter" element={<ThreadRewriter />} />
                 <Route path="saved-content" element={<SavedContent />} />
                 <Route path="settings" element={<Settings />} />

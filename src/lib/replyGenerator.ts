@@ -5,6 +5,8 @@ export interface ReplyGenerationRequest {
   postContent?: string;
   goal?: string;
   context?: string;
+  writingStyleHandles?: string[];
+  tone?: string;
 }
 
 export interface ReplyGenerationResponse {
