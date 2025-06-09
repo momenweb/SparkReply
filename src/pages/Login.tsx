@@ -68,8 +68,8 @@ const Login = () => {
         {/* Header */}
         <div className="text-center">
           <div className="flex justify-center mb-6">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-xl">S</span>
+            <div className="w-12 h-12 flex items-center justify-center">
+              <img src="/favicon.svg" alt="SparkReply Logo" className="w-12 h-12" />
             </div>
           </div>
           <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>

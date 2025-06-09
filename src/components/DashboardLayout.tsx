@@ -97,8 +97,8 @@ const DashboardLayout = () => {
       )}>
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-sm">S</span>
+            <div className="w-8 h-8 flex items-center justify-center">
+              <img src="/favicon.svg" alt="SparkReply Logo" className="w-8 h-8" />
             </div>
             <span className="text-gray-900 font-semibold text-lg">SparkReply</span>
           </div>

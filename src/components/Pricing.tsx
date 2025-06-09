@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Pricing = () => {
   const plans = [
@@ -89,9 +90,11 @@ const Pricing = () => {
                 ))}
               </ul>
               
-              <Button className={`w-full py-3 ${plan.popular ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-md' : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300'}`}>
-                Start writing smarter
-              </Button>
+              <Link to="/signup">
+                <Button className={`w-full py-3 ${plan.popular ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-md' : 'bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300'}`}>
+                  Start writing smarter
+                </Button>
+              </Link>
             </div>
           ))}
         </div>
