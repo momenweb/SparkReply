@@ -116,7 +116,7 @@ const Dashboard = () => {
       {/* Welcome section with quick stats */}
       <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 rounded-2xl p-8 border border-gray-100">
         <div className="flex items-center justify-between mb-6">
-          <div>
+      <div>
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
               Welcome back, {userName}! 👋
             </h1>
@@ -298,7 +298,7 @@ const Dashboard = () => {
             {shortcuts.map((shortcut) => {
               const Icon = shortcut.icon;
               return (
-                <Link key={shortcut.name} to={shortcut.href}>
+              <Link key={shortcut.name} to={shortcut.href}>
                   <div className={`relative flex flex-col items-center p-6 rounded-xl ${shortcut.color} transition-all duration-200 cursor-pointer group hover:scale-105 hover:shadow-lg`}>
                     <div className="absolute top-3 right-3">
                       <Badge variant="secondary" className="bg-white/80 text-gray-700 text-xs">
@@ -311,7 +311,7 @@ const Dashboard = () => {
                     <span className="text-sm font-medium text-gray-900 text-center mb-1">{shortcut.name}</span>
                     <span className="text-xs text-gray-600 text-center">{shortcut.description}</span>
                   </div>
-                </Link>
+              </Link>
               );
             })}
           </div>
@@ -372,7 +372,7 @@ const Dashboard = () => {
                 <Link to="/dashboard/saved-content">
                   <Button variant="ghost" size="sm" className="w-full text-blue-600 hover:text-blue-700">
                     View All Activity <ArrowRight className="w-4 h-4 ml-1" />
-                  </Button>
+            </Button>
                 </Link>
               </div>
             )}
@@ -434,15 +434,15 @@ const Dashboard = () => {
                 <Badge className="bg-purple-600 text-white">
                   {stats.streakDays >= 7 ? 'Excellent' : stats.streakDays >= 3 ? 'Good' : 'Building'}
                 </Badge>
-              </div>
+            </div>
 
               <div className="pt-4 border-t border-gray-100">
                 <Link to="/dashboard/settings">
                   <Button variant="outline" size="sm" className="w-full">
                     <Eye className="w-4 h-4 mr-2" />
                     View Detailed Analytics
-                  </Button>
-                </Link>
+              </Button>
+            </Link>
               </div>
             </div>
           </CardContent>

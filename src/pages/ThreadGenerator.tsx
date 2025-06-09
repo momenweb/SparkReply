@@ -203,25 +203,25 @@ const ThreadGenerator = () => {
         {/* Input section */}
         <div className="lg:col-span-2 space-y-6">
           <Card className="bg-white border-gray-200">
-            <CardHeader>
+          <CardHeader>
               <CardTitle className="text-gray-900 flex items-center">
                 <MessageSquare className="w-5 h-5 mr-2" />
-                Thread Setup
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
+              Thread Setup
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Topic or Idea *
-                </label>
+              </label>
                 <div className="flex space-x-2">
-                  <Textarea
+              <Textarea
                     placeholder="e.g., The future of AI, Building habits that stick, Why most startups fail..."
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value)}
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
                     className="bg-white border-gray-300 text-gray-900 placeholder-gray-500 flex-1"
-                    rows={3}
-                  />
+                rows={3}
+              />
                   <Button
                     variant="outline"
                     size="sm"
@@ -286,25 +286,25 @@ const ThreadGenerator = () => {
                 <p className="text-xs text-gray-500 mt-1">
                   Mimic the writing style of a specific user (optional)
                 </p>
-              </div>
+            </div>
 
-              <Button 
-                onClick={handleGenerate} 
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            <Button 
+              onClick={handleGenerate} 
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                 disabled={isGenerating || !topic.trim()}
-              >
-                {isGenerating ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+            >
+              {isGenerating ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
                     Generating thread...
-                  </>
-                ) : (
-                  <>
-                    <Zap className="w-4 h-4 mr-2" />
+                </>
+              ) : (
+                <>
+                  <Zap className="w-4 h-4 mr-2" />
                     Generate Viral Thread
-                  </>
-                )}
-              </Button>
+                </>
+              )}
+            </Button>
 
               {result && (
                 <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
@@ -322,8 +322,8 @@ const ThreadGenerator = () => {
                   </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
+          </CardContent>
+        </Card>
 
           {/* Trending Topics */}
           <Card className="bg-white border-gray-200">
@@ -443,7 +443,7 @@ const ThreadGenerator = () => {
                           >
                             <Copy className="w-3 h-3 mr-1" />
                             Copy Tweet
-                          </Button>
+                        </Button>
                         </div>
                       </div>
                     </CardContent>
@@ -486,8 +486,8 @@ const ThreadGenerator = () => {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          ) : (
+              </div>
+            ) : (
             <Card className="bg-white border-gray-200">
               <CardContent className="text-center py-12">
                 <div className="space-y-4">
@@ -517,9 +517,9 @@ const ThreadGenerator = () => {
                       Engagement Focused
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+              </div>
+          </CardContent>
+        </Card>
           )}
         </div>
       </div>

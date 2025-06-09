@@ -153,7 +153,7 @@ const Settings = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
+      <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Settings</h1>
           <p className="text-gray-500">Manage your preferences and account settings</p>
         </div>
@@ -194,7 +194,7 @@ const Settings = () => {
             <div>
               <Label htmlFor="email" className="text-gray-700">Email Address</Label>
               <div className="mt-1 flex items-center space-x-2">
-                <Input
+              <Input
                   id="email"
                   value={user?.email || ''}
                   disabled
@@ -219,7 +219,7 @@ const Settings = () => {
               <Label htmlFor="x-handle" className="text-gray-700">X (Twitter) Handle</Label>
               <div className="mt-1 relative">
                 <Twitter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
+              <Input
                   id="x-handle"
                   value={user?.x_handle || ''}
                   placeholder="@yourusername"
@@ -327,7 +327,7 @@ const Settings = () => {
             </div>
 
             {settings.writing_style_handles && settings.writing_style_handles.length > 0 && (
-              <div className="space-y-2">
+            <div className="space-y-2">
                 <Label className="text-gray-700">Added Handles:</Label>
                 <ScrollArea className="h-32 rounded-md border border-gray-200 p-2">
                   <div className="flex flex-wrap gap-2">
@@ -390,32 +390,32 @@ const Settings = () => {
 
         {/* Account & Security */}
         <Card className="bg-white">
-          <CardHeader>
+        <CardHeader>
             <CardTitle className="text-gray-900 flex items-center">
               <Shield className="w-5 h-5 mr-2" />
               Account & Security
-            </CardTitle>
+          </CardTitle>
             <CardDescription>
               Manage your subscription and account security
             </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
+        </CardHeader>
+        <CardContent className="space-y-6">
             <div>
               <Label className="text-gray-700">Current Plan</Label>
               <div className="mt-2 flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
                 <div className="flex items-center space-x-3">
                   <CreditCard className="w-5 h-5 text-blue-600" />
-                  <div>
+              <div>
                     <p className="font-medium text-gray-900">{user?.plan_tier || 'Starter'} Plan</p>
                     <p className="text-sm text-gray-500">100 generations per month</p>
                   </div>
                 </div>
                 <Button variant="outline" size="sm" className="border-blue-200 text-blue-600 hover:bg-blue-50">
                   Upgrade
-                </Button>
+                    </Button>
               </div>
             </div>
-            
+
             <Separator className="bg-gray-100" />
             
             <div className="space-y-3">
@@ -427,14 +427,14 @@ const Settings = () => {
                 Change Password
               </Button>
               
-              <Button 
+                <Button
                 variant="outline" 
                 className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
               >
                 <AlertTriangle className="w-4 h-4 mr-2" />
                 Delete Account
-              </Button>
-            </div>
+                </Button>
+              </div>
           </CardContent>
         </Card>
       </div>

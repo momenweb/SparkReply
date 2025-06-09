@@ -318,7 +318,7 @@ const SavedContent = () => {
                 const Icon = tab.icon;
                 return (
                   <TabsTrigger 
-                    key={tab.id} 
+                    key={tab.id}
                     value={tab.id}
                     className="data-[state=active]:bg-white"
                   >
@@ -344,8 +344,8 @@ const SavedContent = () => {
           "space-y-4"
         }>
           {filteredContent.map((item) => {
-            const TypeIcon = getTypeIcon(item.type);
-            return (
+          const TypeIcon = getTypeIcon(item.type);
+          return (
               <Card key={item.id} className={`bg-white hover:border-gray-300 transition-colors ${
                 viewMode === 'list' ? 'border-l-4' : ''
               } ${
@@ -353,13 +353,13 @@ const SavedContent = () => {
                 item.type === 'reply' ? 'border-l-green-500' :
                 'border-l-purple-500'
               }`}>
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-8 h-8 rounded-lg ${getTypeColor(item.type)} flex items-center justify-center`}>
-                        <TypeIcon className="w-4 h-4 text-white" />
-                      </div>
-                      <div>
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-8 h-8 rounded-lg ${getTypeColor(item.type)} flex items-center justify-center`}>
+                      <TypeIcon className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
                         <CardTitle className="text-gray-900 text-sm font-medium line-clamp-1">
                           {item.title}
                         </CardTitle>
@@ -374,9 +374,9 @@ const SavedContent = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
                   <ScrollArea className="h-24 rounded-md border p-2 mb-4">
                     <p className="text-sm text-gray-700 whitespace-pre-wrap">
                       {item.content}
@@ -408,12 +408,12 @@ const SavedContent = () => {
                     >
                       <Trash2 className="w-3 h-3" />
                     </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
       ) : (
         <Card className="bg-white">
           <CardContent className="p-6 text-center">

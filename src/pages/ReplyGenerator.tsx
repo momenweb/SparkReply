@@ -193,17 +193,17 @@ const ReplyGenerator = () => {
         {/* Input section */}
         <div className="lg:col-span-2 space-y-6">
           <Card className="bg-white border-gray-200">
-            <CardHeader>
+          <CardHeader>
               <CardTitle className="text-gray-900 flex items-center">
                 <Link className="w-5 h-5 mr-2" />
                 Reply Setup
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Input Type
-                </label>
+              </label>
                 <div className="flex space-x-4">
                   <Button
                     variant={inputType === 'url' ? 'default' : 'outline'}
@@ -287,25 +287,25 @@ const ReplyGenerator = () => {
                 <p className="text-xs text-gray-500 mt-1">
                   Brief context about yourself
                 </p>
-              </div>
+            </div>
 
-              <Button 
-                onClick={handleGenerate} 
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            <Button 
+              onClick={handleGenerate} 
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                 disabled={isGenerating || (inputType === 'url' ? !tweetUrl.trim() : !postContent.trim())}
-              >
-                {isGenerating ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+            >
+              {isGenerating ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
                     Analyzing & generating...
-                  </>
-                ) : (
-                  <>
-                    <Zap className="w-4 h-4 mr-2" />
+                </>
+              ) : (
+                <>
+                  <Zap className="w-4 h-4 mr-2" />
                     Generate Viral Replies
-                  </>
-                )}
-              </Button>
+                </>
+              )}
+            </Button>
 
               {result && result.data.original_tweet.author && (
                 <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
@@ -320,15 +320,15 @@ const ReplyGenerator = () => {
                   </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
+          </CardContent>
+        </Card>
         </div>
 
         {/* Output section */}
         <div className="lg:col-span-3">
           {result ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="space-y-4">
+                    <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-gray-900">Viral Replies</h2>
                 <Button
                   variant="outline"
@@ -394,7 +394,7 @@ const ReplyGenerator = () => {
                           </div>
                           <Badge variant="outline" className={styleConfig.color}>
                             {content.length}/280
-                          </Badge>
+                      </Badge>
                         </CardTitle>
                         <p className="text-xs text-gray-600">{styleConfig.description}</p>
                       </CardHeader>
@@ -404,7 +404,7 @@ const ReplyGenerator = () => {
                             {content}
                           </p>
                         </div>
-                        <div className="flex space-x-2">
+                      <div className="flex space-x-2">
                           <Button 
                             variant="outline" 
                             size="sm" 
@@ -412,8 +412,8 @@ const ReplyGenerator = () => {
                             className="flex-1"
                           >
                             <Copy className="w-3 h-3 mr-1" />
-                            Copy
-                          </Button>
+                          Copy
+                        </Button>
                           <Button 
                             variant="outline" 
                             size="sm" 
@@ -421,9 +421,9 @@ const ReplyGenerator = () => {
                             className="flex-1"
                           >
                             <Save className="w-3 h-3 mr-1" />
-                            Save
-                          </Button>
-                        </div>
+                          Save
+                        </Button>
+                      </div>
                       </CardContent>
                     </Card>
                   );
@@ -448,8 +448,8 @@ const ReplyGenerator = () => {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          ) : (
+              </div>
+            ) : (
             <Card className="bg-white border-gray-200">
               <CardContent className="text-center py-12">
                 <div className="space-y-4">
@@ -479,9 +479,9 @@ const ReplyGenerator = () => {
                       Growth Focused
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+              </div>
+          </CardContent>
+        </Card>
           )}
         </div>
       </div>
